@@ -124,46 +124,6 @@
   color-scheme: light;
 }
 
-/* Dark scheme: subdued variant of the office dark theme (_style-dark.scss, $sidenav-background #1a202e) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #232c3e;
-    --surface: #1a202e;
-    --sidenav-bg: #1a202e;
-    --sidenav-item-bg: #2a3650;
-    --sidenav-item-hover: #232c3e;
-    --sidenav-text: #ffffff;
-    --sidenav-text-2: rgba(255, 255, 255, 0.7);
-    --sidenav-subheading: rgba(255, 255, 255, 0.6);
-    --sidenav-divider: rgba(255, 255, 255, 0.12);
-    --sidenav-accent: var(--govco-portage);
-    --surface-2: #11151e;
-    --border: rgba(255, 255, 255, 0.12);
-    --border-strong: rgba(255, 255, 255, 0.3);
-    --text: #ffffff;
-    --text-muted: rgba(255, 255, 255, 0.7);
-    --text-faint: rgba(255, 255, 255, 0.5);
-    --accent: var(--govco-portage);
-    --accent-hover: var(--govco-tropical);
-    --accent-soft: #1c2b52;
-    --accent-tint: #2f4a86;
-    --accent-text: var(--govco-tropical);
-    --success: #2fa17c;
-    --success-soft: #15332a;
-    --warning: var(--govco-sunglow);
-    --warning-border: var(--govco-golden-brown);
-    --warning-soft: #332b0f;
-    --warning-strong: #4d3f12;
-    --danger: #f0657c;
-    --danger-soft: #3a1620;
-    --info-soft: #1c2b52;
-    --code-bg: #11151e;
-    --shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-    color-scheme: dark;
-  }
-}
-
 /* ------------------------------------------------------------------
    Base
    ------------------------------------------------------------------ */
