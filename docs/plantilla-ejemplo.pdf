@@ -1,0 +1,55 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R /F2 5 0 R /F3 6 0 R >> >> /Contents 7 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique >>
+endobj
+7 0 obj
+<< /Length 1080 >>
+stream
+BT /F2 20 Tf 60 760 Td (Tramites JackCore) Tj ET
+BT /F1 12 Tf 60 730 Td (Plantilla de solicitud \(documento de ejemplo\)) Tj ET
+BT /F1 11 Tf 60 708 Td () Tj ET
+BT /F1 11 Tf 60 687 Td (Nombre del solicitante: ______________________________) Tj ET
+BT /F1 11 Tf 60 666 Td (Tipo y numero de documento: __________________________) Tj ET
+BT /F1 11 Tf 60 645 Td (Correo electronico: __________________________________) Tj ET
+BT /F1 11 Tf 60 624 Td (Telefono de contacto: ________________________________) Tj ET
+BT /F1 11 Tf 60 603 Td () Tj ET
+BT /F1 11 Tf 60 582 Td (Descripcion de la solicitud:) Tj ET
+BT /F1 11 Tf 60 561 Td (______________________________________________________) Tj ET
+BT /F1 11 Tf 60 540 Td (______________________________________________________) Tj ET
+BT /F1 11 Tf 60 519 Td (______________________________________________________) Tj ET
+BT /F1 11 Tf 60 498 Td () Tj ET
+BT /F1 11 Tf 60 477 Td (Firma: ____________________    Fecha: ____ / ____ / ______) Tj ET
+BT /F3 9 Tf 60 456 Td (Este PDF es un archivo simulado para la vista previa de campos dinamicos.) Tj ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000267 00000 n 
+0000000337 00000 n 
+0000000412 00000 n 
+0000000490 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+1621
+%%EOF

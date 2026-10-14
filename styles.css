@@ -939,3 +939,21 @@ table.dyn td.idx { width: 36px; color: var(--text-faint); text-align: center; }
   .coords { grid-template-columns: 1fr; }
   .topbar-badge { display: none; }
 }
+
+/* Repeatable section / table previews */
+.dyn-wrap { display: grid; gap: 10px; }
+.dyn-list { display: grid; gap: 10px; }
+.dyn-actions { display: flex; align-items: center; gap: 12px; }
+.dyn-counter { font-size: var(--fs-caption); color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.dyn-section-body { display: grid; gap: 12px; }
+.dyn-section-title.is-collapsible { cursor: pointer; user-select: none; }
+.dyn-section-title.is-collapsible::before { content: "▾ "; color: var(--text-muted); }
+table.dyn .row-actions { display: table-cell; width: 44px; text-align: center; }
+table.dyn td.row-actions .btn { padding: 2px 8px; min-height: 0; }
+
+/* Simulated PDF viewer */
+.pdf-viewer { display: grid; gap: 8px; }
+.pdf-frame { width: 100%; height: min(70vh, 640px); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-2); }
+.doc-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+a.btn { text-decoration: none; display: inline-flex; align-items: center; }
+.btn.disabled { opacity: 0.5; pointer-events: none; }

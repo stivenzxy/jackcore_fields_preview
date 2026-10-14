@@ -210,11 +210,20 @@
     return { text: decPart ? `${grouped}${marker}${decPart}` : grouped, value: number };
   }
 
+  const SAMPLE_PDF = 'docs/plantilla-ejemplo.pdf';
+
+  /* Opens the simulated PDF in a modal, mimicking the office file viewer. */
+  function openPdfViewer(title) {
+    const frame = el('iframe', { class: 'pdf-frame', src: SAMPLE_PDF, title: title || 'Documento' });
+    const fallback = el('p', { class: 'muted' }, 'Si el visor no carga, ', el('a', { href: SAMPLE_PDF, target: '_blank', rel: 'noopener' }, 'abra el PDF en una pestaña nueva'), '.');
+    openModal({ title: title || 'Documento', size: 'lg', body: el('div', { class: 'pdf-viewer' }, frame, fallback) });
+  }
+
   function fileCard(name, subtitle, buttonText, ctx) {
     return el('div', { class: 'file-card' },
       el('div', { class: 'icon', text: 'PDF' }),
       el('div', { class: 'meta' }, el('div', { class: 'name', text: name }), el('div', { class: 'sub', text: subtitle })),
-      el('button', { type: 'button', class: 'btn btn-sm', onclick: () => openModal({ title: name, body: el('p', { text: 'Visor de archivo (simulado).' }) }) }, buttonText));
+      el('button', { type: 'button', class: 'btn btn-sm', onclick: () => openPdfViewer(name) }, buttonText));
   }
 
   function makeMapModal(onPick) {
@@ -384,7 +393,9 @@
     const card = el('div', { class: 'file-card doc-card' },
       el('div', { class: 'icon', text: 'DOC' }),
       el('div', { class: 'meta' }, el('div', { class: 'name', text: template.templateName || 'plantilla' }), el('div', { class: 'sub', text: ctx.general.description || '' })),
-      el('button', { type: 'button', class: 'btn btn-primary btn-sm', disabled: template.allowDownload === false }, 'Descargar plantilla'));
+      el('div', { class: 'doc-actions' },
+        el('button', { type: 'button', class: 'btn btn-sm', onclick: () => openPdfViewer(template.templateName || 'Plantilla') }, 'Ver'),
+        el('a', { class: 'btn btn-primary btn-sm' + (template.allowDownload === false ? ' disabled' : ''), href: SAMPLE_PDF, download: `${template.templateName || 'plantilla'}.pdf`, 'aria-disabled': template.allowDownload === false ? 'true' : null }, 'Descargar plantilla')));
     return { control: card, labelFor: false, getValue: () => undefined };
   }
 
@@ -400,33 +411,122 @@
     return el('button', { type: 'button', class: buttonClass(button.buttonStyle), onclick: () => openModal({ title: modal.modalTitle || 'Modal', size: modal.modalSize, body: el('p', { text: modal.modalContent || '' }) }) }, button.buttonText || 'Abrir');
   }
 
-  function sketchDynamicSection(ctx) {
+  /* Repeatable section: add/remove instances within limitSections, title supports ${index}. */
+  const SECTION_FIELDS = [
+    { key: 'nombre', label: 'Nombre del predio', placeholder: 'Ejm: Finca La Esperanza' },
+    { key: 'area', label: 'Área (ha)', placeholder: 'Ejm: 12.5', type: 'number' },
+  ];
+
+  function previewDynamicSection(ctx) {
     const config = ctx.example.configuration || {};
-    const title = (config.titleSection || 'Sección ${index}').replace('${index}', '1');
-    const inputId = uid('dyn');
-    return el('div', { style: 'display:grid;gap:10px' },
-      el('div', { class: 'dyn-section' },
-        el('div', { class: 'dyn-section-head' }, el('span', { text: title }), el('button', { type: 'button', class: 'btn btn-sm' }, config.removeButtonText || 'Eliminar')),
-        el('div', { class: 'dyn-section-body' }, el('div', { class: 'field' }, el('label', { class: 'field-label', for: inputId, text: 'Campo del predio' }), el('input', { type: 'text', id: inputId, class: 'control', placeholder: 'Texto' })))),
-      el('div', {}, el('button', { type: 'button', class: 'btn btn-primary btn-sm' }, config.addButtonText || 'Agregar')));
+    const limit = Number(config.limitSections) > 0 ? Number(config.limitSections) : Infinity;
+    const minimum = ctx.validate.required ? 1 : 0;
+    const titleTemplate = config.titleSection || 'Sección ${index}';
+    const list = el('div', { class: 'dyn-list' });
+    const addButton = el('button', { type: 'button', class: 'btn btn-primary btn-sm', disabled: ctx.readonly }, config.addButtonText || 'Agregar');
+    const counter = el('span', { class: 'dyn-counter' });
+    const instances = [];
+
+    function refresh() {
+      instances.forEach((inst, index) => {
+        inst.title.textContent = titleTemplate.replace(/\$\{index\}/g, String(index + 1));
+        inst.remove.disabled = ctx.readonly || instances.length <= minimum;
+      });
+      addButton.disabled = ctx.readonly || instances.length >= limit;
+      counter.textContent = Number.isFinite(limit) ? `${instances.length} / ${limit}` : String(instances.length);
+    }
+
+    function addInstance() {
+      if (instances.length >= limit) return;
+      const inputs = {};
+      const body = el('div', { class: 'dyn-section-body' }, SECTION_FIELDS.map((f) => {
+        const id = uid('dyn');
+        inputs[f.key] = el('input', { type: f.type || 'text', id, class: 'control', placeholder: f.placeholder, disabled: ctx.readonly });
+        return el('div', { class: 'field' }, el('label', { class: 'field-label', for: id, text: f.label }), inputs[f.key]);
+      }));
+      const title = el('span', { class: 'dyn-section-title' });
+      const remove = el('button', { type: 'button', class: 'btn btn-sm' }, config.removeButtonText || 'Eliminar');
+      const node = el('div', { class: 'dyn-section' }, el('div', { class: 'dyn-section-head' }, title, remove), body);
+      if (config.collapsible) {
+        title.classList.add('is-collapsible');
+        title.addEventListener('click', () => { body.hidden = !body.hidden; });
+        if (config.collapsed) body.hidden = true;
+      }
+      const inst = { node, title, remove, inputs };
+      remove.addEventListener('click', () => {
+        if (instances.length <= minimum) return;
+        instances.splice(instances.indexOf(inst), 1);
+        node.remove();
+        refresh();
+      });
+      instances.push(inst);
+      list.append(node);
+      refresh();
+    }
+
+    addButton.addEventListener('click', addInstance);
+    const startWith = Math.max(minimum, Number(config.startWithItems) || 1);
+    for (let i = 0; i < Math.min(startWith, limit); i += 1) addInstance();
+
+    const control = el('div', { class: 'dyn-wrap' }, list, el('div', { class: 'dyn-actions' }, addButton, counter));
+    return {
+      control, labelFor: false, helperBelow: true,
+      getValue: () => instances.map((inst) => Object.fromEntries(Object.entries(inst.inputs).map(([k, input]) => [k, input.value]))),
+    };
   }
 
-  function sketchDynamicTable(ctx) {
+  /* Repeatable rows: add/remove between minRows and maxRows, index column renumbers. */
+  function previewDynamicTable(ctx) {
     const config = ctx.example.configuration || {};
     const columns = ((ctx.example.columns || {}).columns || []);
+    const minRows = Math.max(0, Number(config.minRows) || 0);
+    const maxRows = Number(config.maxRows) > 0 ? Number(config.maxRows) : Infinity;
+    const tbody = el('tbody');
+    const addButton = el('button', { type: 'button', class: 'btn btn-primary btn-sm', disabled: ctx.readonly }, config.addRowText || 'Agregar fila');
+    const counter = el('span', { class: 'dyn-counter' });
+    const rows = [];
+
+    function refresh() {
+      rows.forEach((row, index) => {
+        row.index.textContent = String(index + 1);
+        row.remove.disabled = ctx.readonly || rows.length <= minRows;
+      });
+      addButton.disabled = ctx.readonly || rows.length >= maxRows;
+      counter.textContent = Number.isFinite(maxRows) ? `${rows.length} / ${maxRows}` : String(rows.length);
+    }
+
+    function addRow() {
+      if (rows.length >= maxRows) return;
+      const inputs = {};
+      const index = el('td', { class: 'idx' });
+      const remove = el('button', { type: 'button', class: 'btn btn-ghost btn-sm', 'aria-label': config.removeRowText || 'Eliminar', title: config.removeRowText || 'Eliminar' }, '✕');
+      const tr = el('tr', {}, index, columns.map((c) => {
+        inputs[c.value] = el('input', { type: 'text', class: 'control', 'aria-label': c.label, disabled: ctx.readonly });
+        return el('td', {}, inputs[c.value]);
+      }), el('td', { class: 'row-actions' }, remove));
+      const row = { tr, index, remove, inputs };
+      remove.addEventListener('click', () => {
+        if (rows.length <= minRows) return;
+        rows.splice(rows.indexOf(row), 1);
+        tr.remove();
+        refresh();
+      });
+      rows.push(row);
+      tbody.append(tr);
+      refresh();
+    }
+
+    addButton.addEventListener('click', addRow);
+    for (let i = 0; i < Math.max(1, minRows); i += 1) addRow();
+
     const table = el('table', { class: 'dyn' },
-      el('thead', {}, el('tr', {}, el('th', { text: config.nameIndexColumn || '#' }), columns.map((c) => el('th', { text: c.label })))),
-      el('tbody', {}, el('tr', {}, el('td', { class: 'idx', text: '1' }), columns.map((c) => el('td', {}, el('input', { type: 'text', class: 'control', 'aria-label': c.label }))))));
-    return el('div', { style: 'display:grid;gap:10px' }, el('div', { class: 'table-wrap' }, table), el('div', {}, el('button', { type: 'button', class: 'btn btn-primary btn-sm' }, config.addRowText || 'Agregar fila')));
-  }
-
-  const SKETCHES = { 'button-element': sketchButtonElement, 'open-modal': sketchOpenModal, 'dynamic-section': sketchDynamicSection, 'dynamic-table-field': sketchDynamicTable };
-
-  function previewFallback(ctx) {
-    const input = textInput(ctx, 'text');
-    const sketch = SKETCHES[ctx.entry.type];
-    const extra = sketch ? el('div', { class: 'sketch' }, el('div', { class: 'sketch-title', text: 'Cómo debería verse' }), sketch(ctx)) : null;
-    return { control: input, extra, getValue: () => input.value };
+      el('thead', {}, el('tr', {}, el('th', { text: config.nameIndexColumn || '#' }), columns.map((c) => el('th', { text: c.label })), el('th', { class: 'row-actions' }))),
+      tbody);
+    const control = el('div', { class: 'dyn-wrap' }, el('div', { class: 'table-wrap' }, table), el('div', { class: 'dyn-actions' }, addButton, counter));
+    return {
+      control, labelFor: false, helperBelow: true,
+      getValue: () => rows.map((row) => Object.fromEntries(Object.entries(row.inputs).map(([k, input]) => [k, input.value]))),
+    };
   }
 
   const PREVIEWS = {
@@ -454,8 +554,8 @@
     submit: previewSubmit,
     'button-element': (ctx) => ({ control: el('div', {}, sketchButtonElement(ctx)), noLabel: true, getValue: () => undefined }),
     'open-modal': (ctx) => ({ control: el('div', {}, sketchOpenModal(ctx)), noLabel: true, getValue: () => undefined }),
-    'dynamic-section': (ctx) => ({ control: sketchDynamicSection(ctx), labelFor: false, helperBelow: true, getValue: () => [] }),
-    'dynamic-table-field': (ctx) => ({ control: sketchDynamicTable(ctx), labelFor: false, helperBelow: true, getValue: () => [] }),
+    'dynamic-section': previewDynamicSection,
+    'dynamic-table-field': previewDynamicTable,
     markdown: previewMarkdown,
     downloadTemplate: previewDownloadTemplate
   };
@@ -467,7 +567,7 @@
     const general = example.general || {};
     const readonly = opts.readonly != null ? !!opts.readonly : !!(general.readonly || example.readonly);
     const ctx = { entry, example, general, validate: example.validate || {}, readonly, id: uid('f'), key: example.key, onSubmit: opts.onSubmit };
-    const renderer = (entry.status === 'unsupported' ? null : PREVIEWS[entry.type]) || previewFallback;
+    const renderer = PREVIEWS[entry.type] || ((c) => { const input = textInput(c, 'text'); return { control: input, getValue: () => input.value }; });
     const part = renderer(ctx);
     const showLabel = !part.noLabel;
     const bindLabel = showLabel && part.labelFor !== false;
