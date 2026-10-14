@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campos dinámicos · Vista previa</title>
+  <meta name="description" content="Catálogo y previsualización de los campos dinámicos del generador de formularios tal como los renderiza el office.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Ir al contenido</a>
+
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <span class="topbar-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </span>
+      <div class="topbar-titles">
+        <span class="topbar-title">Campos dinámicos</span>
+        <span class="topbar-subtitle">Trámites JackCore · vista previa del renderer dynamic-form</span>
+      </div>
+      <span class="topbar-spacer"></span>
+      <span class="topbar-badge">GOV.CO</span>
+    </div>
+  </header>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Catálogo de componentes">
+      <div class="sidebar-header">
+        <div class="sidebar-title-row">
+          <div>
+            <h2 class="sidebar-title">Catálogo</h2>
+            <p class="sidebar-subtitle" id="sidebar-count">— componentes</p>
+          </div>
+          <button type="button" class="btn btn-ghost sidebar-toggle" id="sidebar-toggle" aria-expanded="false" aria-controls="sidebar-body">
+            Ver lista
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-body" id="sidebar-body">
+        <div class="sidebar-tools">
+          <label class="sr-only" for="search">Buscar componente</label>
+          <input type="search" id="search" class="search" placeholder="Buscar por tipo, etiqueta o grupo…" autocomplete="off">
+          <div class="chips" id="status-chips" role="group" aria-label="Filtrar por estado"></div>
+        </div>
+        <nav class="nav" id="nav" aria-label="Componentes"></nav>
+      </div>
+    </aside>
+
+    <main class="main" id="main" tabindex="-1">
+      <div class="main-inner" id="content"></div>
+      <footer class="footer">
+        Fuente: GET /components del generador, contrastado con el renderer dynamic-form del office.
+      </footer>
+    </main>
+  </div>
+
+  <div class="modal-root" id="modal-root" hidden></div>
+
+  <script src="catalog.data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
