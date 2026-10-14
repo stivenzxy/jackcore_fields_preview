@@ -2540,8 +2540,8 @@ window.FIELD_CATALOG = [
     "groupType": "action",
     "formJsType": "button",
     "officeKey": "button-element",
-    "status": "unsupported",
-    "rendererNotes": "No soportado: la clave del mapa del office es \"button\", no \"button-element\". Cae al input de texto.",
+    "status": "supported",
+    "rendererNotes": "Botón genérico (ButtonElementComponent). Lee general.label y disabled, appearance.buttonStyle, size e icon, y configuration.type/action/actionIdentifier para disparar la acción. behavior.confirmMessage y validateBeforeAction se aplican antes de ejecutar.",
     "groups": [
       {
         "name": "general",
@@ -2886,8 +2886,8 @@ window.FIELD_CATALOG = [
     "groupType": "container",
     "formJsType": "textfield",
     "officeKey": "dynamic-section",
-    "status": "unsupported",
-    "rendererNotes": "No soportado como variable (el generador lo oculta). Las secciones reales se crean con los marcadores startDynamicSection y endDynamicSection.",
+    "status": "supported",
+    "rendererNotes": "Sección repetible (DynamicSectionComponent). Lee configuration.titleSection (admite ${index}), level, limitSections, addButtonText, removeButtonText, collapsible y collapsed; los campos internos se agrupan bajo groupSection. En el JSON del formulario también puede venir como marcadores startDynamicSection / endDynamicSection.",
     "groups": [
       {
         "name": "general",
@@ -3063,8 +3063,8 @@ window.FIELD_CATALOG = [
     "groupType": "complex",
     "formJsType": "textfield",
     "officeKey": "dynamic-table-field",
-    "status": "unsupported",
-    "rendererNotes": "No soportado: el agrupador de tablas del office solo entiende el formato antiguo (properties.type=\"dynamicTable\" con columns como texto separado por comas). Cae al input de texto.",
+    "status": "supported",
+    "rendererNotes": "Tabla con filas repetibles (DynamicTableFieldComponent). Lee columns.columns ({label, value}) para las cabeceras, configuration.nameIndexColumn, minRows, maxRows, addRowText y removeRowText. El valor es un arreglo de filas con una clave por columna.",
     "groups": [
       {
         "name": "general",
@@ -3410,8 +3410,8 @@ window.FIELD_CATALOG = [
     "groupType": "action",
     "formJsType": "textfield",
     "officeKey": "open-modal",
-    "status": "unsupported",
-    "rendererNotes": "No soportado: ElementOpenModalPluginComponent existe pero no está registrado en el mapa. Cae al input de texto.",
+    "status": "supported",
+    "rendererNotes": "Botón que abre un modal (OpenModalComponent). Lee button.buttonText y buttonStyle para el botón, y modal.modalTitle, modalContent, modalSize y modalComponent para el contenido del diálogo.",
     "groups": [
       {
         "name": "general",

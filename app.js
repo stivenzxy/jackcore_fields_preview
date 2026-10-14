@@ -388,7 +388,7 @@
     return { control: card, labelFor: false, getValue: () => undefined };
   }
 
-  /* Fallback + "how it should look" sketches for types the office does not implement. */
+  /* Previews for the element/container types (button, modal, dynamic section, dynamic table). */
 
   function sketchButtonElement(ctx) {
     const appearance = ctx.example.appearance || {};
@@ -452,6 +452,10 @@
     resultCalc: previewResultCalc,
     resultTable: previewResultTable,
     submit: previewSubmit,
+    'button-element': (ctx) => ({ control: el('div', {}, sketchButtonElement(ctx)), noLabel: true, getValue: () => undefined }),
+    'open-modal': (ctx) => ({ control: el('div', {}, sketchOpenModal(ctx)), noLabel: true, getValue: () => undefined }),
+    'dynamic-section': (ctx) => ({ control: sketchDynamicSection(ctx), labelFor: false, helperBelow: true, getValue: () => [] }),
+    'dynamic-table-field': (ctx) => ({ control: sketchDynamicTable(ctx), labelFor: false, helperBelow: true, getValue: () => [] }),
     markdown: previewMarkdown,
     downloadTemplate: previewDownloadTemplate
   };
@@ -664,6 +668,7 @@
     container.innerHTML = '';
     STATUS_ORDER.forEach((status) => {
       const count = status === 'all' ? CATALOG.length : CATALOG.filter((e) => e.status === status).length;
+      if (count === 0) return;
       container.append(el('button', { type: 'button', class: 'chip', 'aria-pressed': String(state.status === status), onclick: () => { state.status = status; renderSidebar(); } },
         status === 'all' ? 'Todos' : STATUS_LABELS[status], el('span', { class: 'count', text: count })));
     });

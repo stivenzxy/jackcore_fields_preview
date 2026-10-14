@@ -36,7 +36,7 @@ También acepta una ruta a un archivo JSON descargado previamente.
 Dentro de `build-catalog.js` se mantienen a mano dos cosas que no vienen del API:
 
 - `STATUS`: si el office soporta el tipo (`supported`), muestra solo un mockup (`mock`)
-  o no lo soporta y cae al input de texto (`unsupported`).
+  o no lo soporta (`unsupported`, hoy ninguno).
 - `NOTES`: qué propiedades lee realmente el renderer del office para cada tipo.
 
 Cuando se agregue un tipo nuevo al generador o se corrija el renderer, actualizar esas
@@ -47,9 +47,8 @@ como `unsupported` y el script lo avisa por consola.
 
 | Estado | Tipos |
 |---|---|
-| Soportado (22) | text, textarea, number, digit, currency, email, tel, datepicker, datetimepicker, checkbox, checkboxList, radioList, select, selectMultiple, editor, file-upload, viewerFile, location, resultCalc, submit, markdown, downloadTemplate |
+| Soportado (26) | text, textarea, number, digit, currency, email, tel, datepicker, datetimepicker, checkbox, checkboxList, radioList, select, selectMultiple, editor, file-upload, viewerFile, location, resultCalc, submit, markdown, downloadTemplate, button-element, open-modal, dynamic-section, dynamic-table-field |
 | Mockup (2) | recaptcha, resultTable |
-| No soportado (4) | button-element, open-modal, dynamic-section, dynamic-table-field |
 
 Las secciones dinámicas reales se construyen con los marcadores `startDynamicSection`
 y `endDynamicSection`, no con la variable `dynamic-section`.

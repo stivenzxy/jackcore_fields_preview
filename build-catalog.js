@@ -19,9 +19,9 @@ const OUT = path.join(__dirname, 'catalog.data.js');
 const FORMJS = { text:'textfield', textarea:'textarea', number:'number', digit:'number', currency:'number', email:'textfield', tel:'textfield', datepicker:'datetime', datetimepicker:'datetime', checkbox:'checkbox', checkboxList:'checklist', radioList:'radio', select:'select', selectMultiple:'taglist', editor:'textfield', 'file-upload':'filepicker', viewerFile:'textfield', location:'textfield', recaptcha:'textfield', resultCalc:'textfield', resultTable:'textfield', submit:'button', 'button-element':'button', 'open-modal':'textfield', 'dynamic-section':'textfield', 'dynamic-table-field':'textfield', markdown:'text', downloadTemplate:'textfield' };
 const OFFICE_KEY = { 'file-upload':'uploadFile' };
 const STATUS = {
-  supported: ['text','textarea','number','digit','currency','email','tel','datepicker','datetimepicker','checkbox','checkboxList','radioList','select','selectMultiple','editor','file-upload','viewerFile','location','resultCalc','submit','markdown','downloadTemplate'],
+  supported: ['text','textarea','number','digit','currency','email','tel','datepicker','datetimepicker','checkbox','checkboxList','radioList','select','selectMultiple','editor','file-upload','viewerFile','location','resultCalc','submit','markdown','downloadTemplate','button-element','open-modal','dynamic-section','dynamic-table-field'],
   mock: ['recaptcha','resultTable'],
-  unsupported: ['button-element','open-modal','dynamic-section','dynamic-table-field'],
+  unsupported: [],
 };
 const NOTES = {
   text: 'El office lee general.label, description y readonly. mask, keepMask, thousandSeparator, decimalDigits y decimalMarker se configuran en el generador pero el plugin de texto no los aplica. prefix y suffix se leen desde appearance, no desde general.',
@@ -46,10 +46,10 @@ const NOTES = {
   resultCalc: 'Campo de solo lectura. La ecuación se lee desde properties.equation, general.equation o attributes.general.equation.',
   resultTable: 'Mockup: tabla fija (Producto A / Producto B) más un total de solo lectura. lastColumnResult y tableIdentity no se usan.',
   submit: 'Lee label, disabled, appearance.buttonStyle, appearance.size, configuration.action y statusControl. confirmMessage, loadingText y resetOnSend se ignoran.',
-  'button-element': 'No soportado: la clave del mapa del office es "button", no "button-element". Cae al input de texto.',
-  'open-modal': 'No soportado: ElementOpenModalPluginComponent existe pero no está registrado en el mapa. Cae al input de texto.',
-  'dynamic-section': 'No soportado como variable (el generador lo oculta). Las secciones reales se crean con los marcadores startDynamicSection y endDynamicSection.',
-  'dynamic-table-field': 'No soportado: el agrupador de tablas del office solo entiende el formato antiguo (properties.type="dynamicTable" con columns como texto separado por comas). Cae al input de texto.',
+  'button-element': 'Botón genérico (ButtonElementComponent). Lee general.label y disabled, appearance.buttonStyle, size e icon, y configuration.type/action/actionIdentifier para disparar la acción. behavior.confirmMessage y validateBeforeAction se aplican antes de ejecutar.',
+  'open-modal': 'Botón que abre un modal (OpenModalComponent). Lee button.buttonText y buttonStyle para el botón, y modal.modalTitle, modalContent, modalSize y modalComponent para el contenido del diálogo.',
+  'dynamic-section': 'Sección repetible (DynamicSectionComponent). Lee configuration.titleSection (admite ${index}), level, limitSections, addButtonText, removeButtonText, collapsible y collapsed; los campos internos se agrupan bajo groupSection. En el JSON del formulario también puede venir como marcadores startDynamicSection / endDynamicSection.',
+  'dynamic-table-field': 'Tabla con filas repetibles (DynamicTableFieldComponent). Lee columns.columns ({label, value}) para las cabeceras, configuration.nameIndexColumn, minRows, maxRows, addRowText y removeRowText. El valor es un arreglo de filas con una clave por columna.',
   markdown: 'Lee content.text (o general.text / text) y properties.readVariable. dynamic.readVariable, allowHtml, enableLinks y theme se ignoran.',
   downloadTemplate: 'Con readonly muestra el visor de plantilla usando general.templateName. El grupo template (templateName, fileUrl, allowDownload, allowPrint) se ignora.',
 };
