@@ -4,6 +4,7 @@
   'use strict';
 
   const CATALOG = Array.isArray(window.FIELD_CATALOG) ? window.FIELD_CATALOG : [];
+  const DESCRIPTIONS = window.FIELD_DESCRIPTIONS || {};
 
   const GROUP_LABELS = {
     input: 'Campos de entrada',
@@ -639,6 +640,16 @@
     return section;
   }
 
+  function descriptionSection(entry) {
+    const text = DESCRIPTIONS[entry.type];
+    if (!text) return null;
+    const content = el('p', { class: 'description-text' });
+    text.split('`').forEach((part, i) => content.append(i % 2 ? el('code', { text: part }) : part));
+    return el('section', { class: 'section' },
+      el('h2', { class: 'section-title', text: 'Descripción' }),
+      el('div', { class: 'card description-card' }, content));
+  }
+
   function notesSection(entry) {
     const kind = entry.status === 'supported' ? 'info' : entry.status;
     return el('section', { class: 'section' },
@@ -700,7 +711,7 @@
         badge('type (form-js)', entry.formJsType || '—'),
         entry.officeKey && entry.officeKey !== entry.type ? badge('clave office', entry.officeKey) : null,
         statusPill(entry.status)));
-    return [header, previewSection(entry), notesSection(entry), propsSection(entry), jsonSection(entry)];
+    return [header, descriptionSection(entry), previewSection(entry), notesSection(entry), propsSection(entry), jsonSection(entry)];
   }
 
   /* ---------------------------------------------------------------- Full form view */
@@ -808,7 +819,7 @@
     if (state.selected === FORM_ROUTE) { content.append(...renderFormView()); return; }
     const entry = CATALOG.find((e) => e.type === state.selected);
     if (!entry) { content.append(el('p', { class: 'nav-empty', text: 'Componente no encontrado.' })); return; }
-    content.append(...renderComponent(entry));
+    content.append(...renderComponent(entry).filter(Boolean));
     document.title = `${entry.label} · Campos dinámicos`;
   }
 
