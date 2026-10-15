@@ -452,6 +452,19 @@ button { font: inherit; }
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
+.description-card {
+  padding: 16px 24px;
+  border-left: 3px solid var(--accent);
+}
+.description-text { margin: 0; line-height: 24px; color: var(--text); }
+.description-text code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border-radius: var(--radius);
+  padding: 1px 6px;
+}
 .card-unsupported { border-color: var(--danger); }
 .card-mock { border-color: var(--warning-border); }
 

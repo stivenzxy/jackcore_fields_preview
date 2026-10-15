@@ -1,0 +1,33 @@
+/* Descripciones funcionales de cada tipo de campo (uso recomendado y limitaciones).
+   Se mantiene a mano, separado de catalog.data.js, que es generado.
+   Clave: typeComponent del catálogo. Los fragmentos entre `backticks` se muestran como código. */
+window.FIELD_DESCRIPTIONS = {
+  "text": "Campo de texto de una línea. Se usa para cualquier dato corto en texto libre: nombres, apellidos, número de documento, códigos, cargos, ciudades. Permite limitar longitud mínima y máxima y validar con una expresión regular. No aplica máscaras ni formato numérico aunque el generador los muestre.",
+  "textarea": "Área de texto de varias líneas, con alto configurable en filas. Para descripciones, observaciones, justificaciones, motivos de solicitud o cualquier dato donde el usuario necesite escribir un párrafo. Admite longitud mínima y máxima y patrón.",
+  "number": "Campo numérico básico sin formato visual. Sirve para cantidades enteras simples (número de personas, número de unidades) cuando no importa cómo se vea el número. Valida longitud y patrón, pero no agrupa miles ni maneja decimales.",
+  "digit": "Campo numérico con presentación: prefijo, sufijo y cantidad de decimales. Para valores donde el formato ayuda a leer el dato: porcentajes, medidas, pesos, puntajes. Separador de miles y máscara no se aplican.",
+  "currency": "Campo monetario. Viene con prefijo `$`, separador de miles activado y dos decimales. Para montos, salarios, valores a pagar, presupuestos. Es el único que valida valor mínimo y máximo numérico.",
+  "email": "Campo para correo electrónico. Solo exige que esté diligenciado si es requerido; no valida que tenga formato de email, así que si eso importa hay que agregar un patrón.",
+  "tel": "Campo para número telefónico. Tiene un formato por país que solo cambia el texto de ayuda; la validación real sale de longitud mínima/máxima y patrón.",
+  "datepicker": "Selector de calendario para una fecha (día, mes, año), sin hora. Fechas de nacimiento, de solicitud, de vencimiento. El modo solo lectura no funciona en este componente.",
+  "datetimepicker": "Selector de hora del día, no de fecha y hora como sugiere el nombre. Para hora de una cita, de un evento, de un turno. Si se necesita fecha y hora, se combinan `datepicker` y `datetimepicker`.",
+  "checkbox": "Una sola casilla de verdadero/falso. Para aceptación de términos, declaraciones juradas, confirmar que se leyó algo, o cualquier pregunta sí/no donde \"no marcado\" es una respuesta válida.",
+  "checkboxList": "Grupo de casillas donde el usuario puede marcar varias a la vez. Para preguntas de selección múltiple con pocas opciones (hasta unas 8) que conviene ver todas de una vez. Además del valor guarda las etiquetas elegidas en una variable `<key>_value`.",
+  "radioList": "Grupo de opciones visibles donde solo se puede elegir una. Para preguntas excluyentes con pocas alternativas: tipo de documento, sí/no/no aplica, modalidad. También guarda la etiqueta elegida en `<key>_value`.",
+  "select": "Lista desplegable de selección única. Para listas largas o que cambian (departamentos, entidades, tipos de trámite). Las opciones pueden ser fijas o cargarse desde una URL, y puede depender de otro campo para filtrar opciones (por ejemplo municipio según departamento).",
+  "selectMultiple": "Lista desplegable que permite elegir varias opciones. Mismo caso que `select` pero cuando se admite más de una respuesta y hay demasiadas opciones para mostrarlas como casillas.",
+  "file-upload": "Caja para subir un archivo desde el equipo del usuario: PDF, imágenes, documentos soporte. En modo solo lectura muestra el archivo cargado en lugar de la caja de carga.",
+  "location": "Captura de ubicación geográfica: dos campos de latitud y longitud más un mapa donde el usuario puede marcar el punto. Guarda las coordenadas como texto \"lat,long\" en sistema EPSG:9377. Para dirección de un predio, sitio de un evento, punto de atención.",
+  "editor": "Editor de texto enriquecido (negrita, listas, etc.) para contenido con formato. Para redactar textos largos que luego se muestran o imprimen.",
+  "dynamic-section": "Bloque de varios campos que el usuario puede repetir las veces que necesite, con botones de agregar y eliminar. Cada instancia tiene su título y puede colapsarse. Para registrar varias personas, varias direcciones, varios beneficiarios, cuando cada uno tiene su propio conjunto de campos.",
+  "dynamic-table-field": "Tabla con columnas definidas donde el usuario agrega y quita filas. Para listados planos de ítems: productos con cantidad y valor, relación de documentos, detalle de gastos. Se configuran mínimo y máximo de filas. El valor queda como arreglo de filas.",
+  "viewerFile": "Visor de un archivo que se subió en otro campo del formulario; se le indica la key del `file-upload` a mostrar. Solo lectura. Para que un revisor vea el documento adjunto sin poder cambiarlo.",
+  "downloadTemplate": "Visor de una plantilla de documento predefinida para que el usuario la consulte o descargue. Para formatos que el ciudadano debe diligenciar y volver a subir, o documentos de referencia del trámite.",
+  "markdown": "Bloque de texto informativo con formato markdown. No captura datos; sirve para instrucciones, avisos legales, notas de ayuda. Puede tomar su contenido de otra variable del formulario para mostrar texto dinámico.",
+  "resultCalc": "Campo de solo lectura que muestra el resultado de una fórmula escrita con los nombres de otros campos. Para totales, subtotales, cálculo de un valor a pagar a partir de cantidades y precios.",
+  "resultTable": "Tabla de resultados calculados. Hoy es solo un mock con datos fijos; no se debe usar en formularios reales todavía.",
+  "button-element": "Botón que dispara una acción configurable, con estilo, tamaño e icono. Puede pedir confirmación y validar el formulario antes de ejecutar. Además puede escribir un valor en una variable de estado del proceso (por ejemplo poner el trámite \"En revisión\"). Para acciones distintas al envío final: devolver a subsanación, rechazar, guardar borrador.",
+  "submit": "Botón de envío del formulario. Valida antes de enviar y puede fijar un estado del proceso al enviarse. Debe haber uno por formulario. Puede relacionarse con otro formulario.",
+  "open-modal": "Botón que abre una ventana emergente con un título y contenido, o con otro componente adentro. Para mostrar ayuda extendida, términos completos, o un subformulario sin salir de la pantalla.",
+  "recaptcha": "Verificación \"no soy un robot\". Hoy es un mock que no integra Google reCAPTCHA; se incluye solo para marcar el lugar donde iría."
+};
